@@ -1,16 +1,4 @@
 # react-contextmenu
-
-[![Travis][build-badge]][build]
-[![npm package][npm-badge]][npm]
-[![Coveralls][coveralls-badge]][coveralls]
-
-Describe react-contextmenu here.
-
-[build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
-[build]: https://travis-ci.org/user/repo
-
-[npm-badge]: https://img.shields.io/npm/v/npm-package.png?style=flat-square
-[npm]: https://www.npmjs.org/package/npm-package
-
-[coveralls-badge]: https://img.shields.io/coveralls/user/repo/master.png?style=flat-square
-[coveralls]: https://coveralls.io/github/user/repo
+React context menu. Custom menu items, callback function for all menus (delegation). Customizable style, disabled item by condition.
+An example of use.
+[link to codesandbox!](https://codesandbox.io/s/github/john050481/react-contextmenu)
