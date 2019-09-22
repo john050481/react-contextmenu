@@ -1,5 +1,6 @@
 # react-contextmenu
 ![menu demo](https://github.com/john050481/react-contextmenu/blob/master/demo.png)
+
 React context menu. Custom menu items, callback function for all menus (delegation). Customizable style, disabled item by condition.
 An example of use.
 [link to codesandbox!](https://codesandbox.io/s/john0504react-contextmenu-e211k)
@@ -7,7 +8,7 @@ An example of use.
 # Getting started
 ```bash
 # via npm
-npm install --save react-calendar-timeline
+npm i @john0504/react-contextmenu
 ```
 # Usage
 ```jsx
