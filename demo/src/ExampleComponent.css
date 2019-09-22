@@ -1,0 +1,26 @@
+.exampleRightClick {
+  background-color: rgb(253, 190, 190);
+  border: solid 1px black;
+  padding: 10px;
+}
+
+#dataset {
+  background-color: rgb(216, 216, 216);
+}
+
+.value {
+  background-color: rgb(195, 255, 193);
+}
+
+#props {
+  background-color: rgb(216, 216, 216);
+}
+
+table {
+  border: solid 1px black;
+  background-color: rgb(195, 255, 193);
+}
+table td {
+  border: solid 1px black;
+  padding: 10px;
+}

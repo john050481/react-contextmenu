@@ -1,13 +1,12 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
-
-import Example from '../../src'
+import { ExampleComponent } from "./ExampleComponent";
 
 class Demo extends Component {
   render() {
     return <div>
       <h1>react-contextmenu Demo</h1>
-      <Example/>
+      <ExampleComponent/>
     </div>
   }
 }
