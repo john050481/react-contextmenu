@@ -3,6 +3,8 @@
 
 React context menu. Custom menu items, callback function for all menus (delegation). Customizable style, disabled item by condition.
 An example of use.
+
+# Example
 [link to codesandbox!](https://codesandbox.io/s/john0504react-contextmenu-e211k)
 
 # Getting started
@@ -73,9 +75,9 @@ let items = [
 /**
 * ContextMenu - import component
 * @param {boolean} visible - if this.state.visible === true, menu visible
-* @param {string} pageXY - [x, y], coords click mouse (left and top)
-* @param {string} items - items menus
-* @param {string} callbackOnClickMenu - callbackOnClickMenu for click menu item (return data and parent LI element)
+* @param {array} pageXY - [x, y], coords click mouse (left and top)
+* @param {array} items - [object] items menus
+* @param {function} callbackOnClickMenu - callbackOnClickMenu for click menu item (return data and parent LI element)
 */
 <ContextMenu
   visible={this.state.visible}
