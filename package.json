@@ -1,5 +1,5 @@
 {
-  "name": "react-contextmenu",
+  "name": "@john0504/react-contextmenu",
   "version": "1.0.0",
   "description": "React context menu. Custom menu items, callback function for all menus (delegation). Customizable style, disabled item by condition.\nAn example of use.",
   "main": "lib/index.js",
@@ -11,7 +11,7 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-react-component",
+    "build": "nwb build-react-component --copy-files",
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
