@@ -1,5 +1,5 @@
 # react-contextmenu
-![menu demo](https://github.com/john050481/react-contextmenu/blob/master/demo.png)
+![menu demo](https://raw.githubusercontent.com/john050481/react-contextmenu/master/demo.png)
 
 React context menu. Custom menu items, callback function for all menus (delegation). Customizable style, disabled item by condition.
 An example of use.
@@ -14,6 +14,15 @@ npm i @john0504/react-contextmenu
 ```jsx
 import ContextMenu from "@john0504/react-contextmenu";
 
+/**
+* items - array of object (items)
+* @param {string} type - item/separator/submenu
+* @param {string} title - title menu
+* @param {string} data - return data from callback
+* @param {string} icon - icon @fortawesome
+* @param {string} className - className
+* @param {string} submenu - if type 'submenu', array of item
+*/
 let items = [
   {
     type: "item",
@@ -33,14 +42,14 @@ let items = [
     submenu: [
       {
         type: "item",
-        title: "Title submenu2",
-        data: "dataFromCallback2",
+        title: "Title submenu1",
+        data: "dataFromCallbackSub1",
         icon: "folder-plus"
       },
       {
         type: "submenu",
         title: "Title submenu2",
-        data: "dataSubmenu2",
+        data: "dataFromCallbackSub2",
         icon: "edit",
         submenu: [
           { type: "item", title: "Title subSubMenu1", data: "dataSubSubMenu1" },
@@ -61,6 +70,13 @@ let items = [
 
 ...
 
+/**
+* ContextMenu - import component
+* @param {boolean} visible - if this.state.visible === true, menu visible
+* @param {string} pageXY - [x, y], coords click mouse (left and top)
+* @param {string} items - items menus
+* @param {string} callbackOnClickMenu - callbackOnClickMenu for click menu item (return data and parent LI element)
+*/
 <ContextMenu
   visible={this.state.visible}
   pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}
