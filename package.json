@@ -1,6 +1,6 @@
 {
   "name": "@john0504/react-contextmenu",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "React context menu. Custom menu items, callback function for all menus (delegation). Customizable style, disabled item by condition.\nAn example of use.",
   "main": "lib/index.js",
   "module": "es/index.js",
