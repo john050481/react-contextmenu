@@ -1,113 +1,117 @@
-import React, { Component } from "react";
 import "./index.css";
+import React, {useLayoutEffect, useRef} from "react";
 import PropTypes from "prop-types";
+
+import {useOnClickOutside} from './useOnClickOutside';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 library.add(fas);
 
-function MenuItem(props) {
-  let className = props.item.className ? " " + props.item.className : "";
-  let icon = props.item.icon ? (
-    <FontAwesomeIcon className="fa" icon={props.item.icon} />
-  ) : null;
+function MenuItem({item}) {
   return (
-    <li className={"menu-item" + className} data-data={props.item.data}>
+    <li className={ "menu-item" + (item.className ? ` ${item.className}` : "") } data-data={item.data}>
       <button type="button" className="menu-btn">
-        {icon}
-        <span className="menu-text">{props.item.title}</span>
+        {
+          item.icon
+              ? <FontAwesomeIcon className="fa" icon={item.icon} />
+              : null
+        }
+        <span className="menu-text">{item.title}</span>
       </button>
     </li>
   );
 }
-function MenuSeparator(props) {
-  let className = props.item.className ? " " + props.item.className : "";
-  return <li className={"menu-separator" + className} />;
+function MenuSeparator({item}) {
+  return <li className={ "menu-separator" + (item.className ? ` ${item.className}` : "") } />;
 }
-function MenuSubmenu(props) {
-  let className = props.item.className ? " " + props.item.className : "";
-  let icon = props.item.icon ? (
-    <FontAwesomeIcon className="fa" icon={props.item.icon} />
-  ) : null;
+function MenuSubmenu({item, createMenu}) {
   return (
-    <li className={"menu-item submenu" + className} data-data={props.item.data}>
+    <li className={ "menu-item submenu" + (item.className ? ` ${item.className}` : "") } data-data={item.data}>
       <button type="button" className="menu-btn">
-        {icon}
-        <span className="menu-text">{props.item["title"]}</span>
+        {
+          item.icon
+              ? <FontAwesomeIcon className="fa" icon={item.icon} />
+              : null
+        }
+        <span className="menu-text">{item["title"]}</span>
       </button>
-      {props.createMenu(props.item["submenu"], true)}
+      {createMenu(item["submenu"], true)}
     </li>
   );
 }
 
-export default class ContextMenu extends Component {
+export default function ContextMenu(props) {
 
-  componentDidUpdate(prevProps, prevState) {
-    let menu = document.querySelector('menu');
-    if (!menu) return;
+  let menuElem = useRef(null);
+  useOnClickOutside(menuElem, props.hideMenu);
+
+  useLayoutEffect( () => {
+    console.log('useEffect', menuElem.current, props);
+
+    if (!menuElem.current) return;
 
     let widthWindow = document.documentElement.clientWidth;
     let heightWindow = document.documentElement.clientHeight;
-    let coordsMenu = menu.getBoundingClientRect();
+    let coordsMenu = menuElem.current.getBoundingClientRect();
 
     if (widthWindow < coordsMenu.x + coordsMenu.width) {
-      menu.style.left = widthWindow - coordsMenu.width + 'px';
+      menuElem.current.style.left = widthWindow - coordsMenu.width + 'px';
     };
     if (heightWindow < coordsMenu.y + coordsMenu.height) {
-      menu.style.top = heightWindow - coordsMenu.height + 'px';
+      menuElem.current.style.top = heightWindow - coordsMenu.height + 'px';
     };
 
-    let menus = Array.from(document.querySelectorAll('menu')).slice(1);
-    menus.forEach( (menu, i) => {
-      menu.classList.remove('menuRight');
-      menu.classList.add('menuLeft');
-      menu.classList.remove('menuBottom');
-      menu.classList.add('menuTop');
-      coordsMenu = menu.getBoundingClientRect();
+    let submenus = Array.from(document.querySelectorAll('menu')).slice(1);
+    submenus.forEach( submenu => {
+      submenu.classList.remove('menuRight');
+      submenu.classList.add('menuLeft');
+      submenu.classList.remove('menuBottom');
+      submenu.classList.add('menuTop');
+      coordsMenu = submenu.getBoundingClientRect();
       if (coordsMenu.x < 0) {
-        menu.classList.remove('menuRight');
-        menu.classList.add('menuLeft');
+        submenu.classList.remove('menuRight');
+        submenu.classList.add('menuLeft');
       } else if (widthWindow < coordsMenu.x + coordsMenu.width) {
-        menu.classList.add('menuRight');
-        menu.classList.remove('menuLeft');
+        submenu.classList.add('menuRight');
+        submenu.classList.remove('menuLeft');
       };
       if (heightWindow < coordsMenu.y + coordsMenu.height) {
-        menu.classList.add('menuBottom');
-        menu.classList.remove('menuTop');
+        submenu.classList.add('menuBottom');
+        submenu.classList.remove('menuTop');
       };
     } );
-  }
+  });
 
-  onClickMenu = e => {
-    let parentLiElem = e.target.closest("li.menu-item");
+  function onClickMenu(e) {
+    let parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
     if (parentLiElem) {
-      this.props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
-    }
+      props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+      props.hideMenu();
+    };
   };
 
-  createMenu(arrMenuItem, submenu = false) {
-    if (!submenu && !this.props.visible) {
-      return [];
-    }
+  function createMenu(arrMenuItem, submenu = false) {
     return (
       <menu
+        ref={submenu ? null : menuElem}
         className={submenu ? "menu" : "menu show-menu"}
         style={
           submenu
             ? null
-            : { left: this.props.pageXY[0], top: this.props.pageXY[1] }
+            : { left: props.pageXY[0], top: props.pageXY[1] }
         }
-        onClick={submenu ? null : e => this.onClickMenu(e)}
+        onClick={submenu ? null : e => onClickMenu(e)}
       >
-        {arrMenuItem.map((item, i, arr) => {
+        {arrMenuItem.map((item, i) => {
           if (item["type"] === "item") {
             return <MenuItem key={i} item={item} />;
           } else if (item["type"] === "separator") {
             return <MenuSeparator key={i} item={item} />;
           } else if (item["type"] === "submenu") {
             return (
-              <MenuSubmenu key={i} item={item} createMenu={this.createMenu} />
+              <MenuSubmenu key={i} item={item} createMenu={createMenu} />
             );
           } else {
             return <div key={i}>{item["type"]}</div>;
@@ -117,16 +121,16 @@ export default class ContextMenu extends Component {
     );
   }
 
-  render() {
-    if (!this.props.visible) return false;
-
-    let contextMenu = this.createMenu(this.props.items);
-    return <div className='react-contextmenu'>{contextMenu}</div>;
-  }
+  return (
+      props.visible
+          ? <div className='react-contextmenu'>{createMenu(props.items)}</div>
+          : null
+  )
 }
 
 ContextMenu.defaultProps = {
   visible: false,
+  hideMenu: () => {},
   pageXY: [0, 0],
   items: [
     { type: "item", title: "defItem1", data: "defdata1", icon: "check-square" },
@@ -164,6 +168,7 @@ ContextMenu.defaultProps = {
 
 ContextMenu.propTypes = {
   visible: PropTypes.bool,
+  hideMenu: PropTypes.func,
   pageXY: PropTypes.array,
   items: PropTypes.array,
   callbackOnClickMenu: PropTypes.func

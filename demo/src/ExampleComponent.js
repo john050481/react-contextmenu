@@ -29,7 +29,7 @@ export class ExampleComponent extends Component {
   }
 
   onClick(e) {
-    this.setState({ visible: false });
+    //this.setState({ visible: false });
   }
 
   onContextMenu(e) {
@@ -262,6 +262,7 @@ export class ExampleComponent extends Component {
         <hr />
         <ContextMenu
           visible={this.state.visible}
+          hideMenu={ () => this.setState({ visible: false }) }
           pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}
           items={items}
           callbackOnClickMenu={(data, parentLiElem) => {
