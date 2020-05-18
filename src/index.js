@@ -118,8 +118,10 @@ export default class ContextMenu extends Component {
   }
 
   render() {
+    if (!this.props.visible) return false;
+
     let contextMenu = this.createMenu(this.props.items);
-    return <div>{contextMenu}</div>;
+    return <div className='react-contextmenu'>{contextMenu}</div>;
   }
 }
 
