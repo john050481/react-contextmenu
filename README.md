@@ -75,16 +75,18 @@ let items = [
 /**
 * ContextMenu - import component
 * @param {boolean} visible - if this.state.visible === true, menu visible
+* @param {function} hideMenu - function that hides the menu
 * @param {array} pageXY - [x, y], coords click mouse (left and top)
 * @param {array} items - [object] items menus
 * @param {function} callbackOnClickMenu - callbackOnClickMenu for click menu item (return data and parent LI element)
 */
-<ContextMenu
-  visible={this.state.visible}
-  pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}
-  items={items}
-  callbackOnClickMenu={(data, parentLiElem) => {
-    this.callbackOnClickMenu(data, parentLiElem);
-  }}
-/>
+        <ContextMenu
+          visible={this.state.visible}
+          hideMenu={ () => this.setState({ visible: false }) }
+          pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}
+          items={items}
+          callbackOnClickMenu={(data, parentLiElem) => {
+            this.callbackOnClickMenu(data, parentLiElem);
+          }}
+        />
 ```
