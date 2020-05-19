@@ -1,5 +1,5 @@
 /*!
- * @john0504/react-contextmenu v1.0.4 - https://github.com/john050481/react-contextmenu#readme
+ * @john0504/react-contextmenu v1.1.0 - https://github.com/john050481/react-contextmenu#readme
  * MIT Licensed
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -3158,19 +3158,74 @@ process.umask = function() { return 0; };
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ src_ContextMenu; });
+__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ ContextMenu; });
+
+// EXTERNAL MODULE: ./src/index.css
+var src = __webpack_require__(5);
 
 // EXTERNAL MODULE: external {"root":"React","commonjs2":"react","commonjs":"react","amd":"react"}
 var external_root_React_commonjs2_react_commonjs_react_amd_react_ = __webpack_require__(1);
 var external_root_React_commonjs2_react_commonjs_react_amd_react_default = /*#__PURE__*/__webpack_require__.n(external_root_React_commonjs2_react_commonjs_react_amd_react_);
 
-// EXTERNAL MODULE: ./src/index.css
-var src = __webpack_require__(5);
-
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(0);
 var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
+// CONCATENATED MODULE: ./src/useOnClickOutside.js
+/*
+#######################################################
+https://usehooks.com
+#######################################################
+// Usage
+import { useState, useRef } from 'react';
+function App() {
+    // Create a ref that we add to the element for which we want to detect outside clicks
+    const ref = useRef();
+    // State for our modal
+    const [isModalOpen, setModalOpen] = useState(false);
+    // Call hook passing in the ref and a function to call on outside click
+    useOnClickOutside(ref, () => setModalOpen(false));
+
+    return (
+        <div>
+        {isModalOpen ? (
+                <div ref={ref}>
+          👋 Hey, I'm a modal. Click anywhere outside of me to close.
+    </div>
+) : (
+    <button onClick={() => setModalOpen(true)}>Open Modal</button>
+)}
+</div>
+);
+}
+*/
+// Hook
+
+function useOnClickOutside(ref, handler) {
+  Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useEffect"])(function () {
+    var listener = function listener(event) {
+      // Do nothing if clicking ref's element or descendent elements
+      if (!ref.current || ref.current.contains(event.target)) {
+        return;
+      }
+
+      handler(event);
+    };
+
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
+    return function () {
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
+    };
+  }, // Add ref and handler to effect dependencies
+  // It's worth noting that because passed in handler is a new ...
+  // ... function on every render that will cause this effect ...
+  // ... callback/cleanup to run every render. It's not a big deal ...
+  // ... but to optimize you can wrap handler in useCallback before ...
+  // ... passing it into this hook.
+  [ref, handler]);
+}
 // EXTERNAL MODULE: ./node_modules/@fortawesome/fontawesome-svg-core/index.es.js
 var index_es = __webpack_require__(2);
 
@@ -9534,11 +9589,6 @@ var _iconsCache = {
 
 
 // CONCATENATED MODULE: ./src/index.js
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
-function src_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -9548,138 +9598,123 @@ function src_defineProperty(obj, key, value) { if (key in obj) { Object.definePr
 
 index_es["b" /* library */].add(_iconsCache);
 
-function MenuItem(props) {
-  var className = props.item.className ? " " + props.item.className : "";
-  var icon = props.item.icon ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(FontAwesomeIcon, {
-    className: "fa",
-    icon: props.item.icon
-  }) : null;
+function MenuItem(_ref) {
+  var item = _ref.item;
   return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("li", {
-    className: "menu-item" + className,
-    "data-data": props.item.data
+    className: "menu-item" + (item.className ? " " + item.className : ""),
+    "data-data": item.data
   }, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("button", {
     type: "button",
     className: "menu-btn"
-  }, icon, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("span", {
+  }, item.icon ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(FontAwesomeIcon, {
+    className: "fa",
+    icon: item.icon
+  }) : null, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("span", {
     className: "menu-text"
-  }, props.item.title)));
+  }, item.title)));
 }
 
-function MenuSeparator(props) {
-  var className = props.item.className ? " " + props.item.className : "";
+function MenuSeparator(_ref2) {
+  var item = _ref2.item;
   return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("li", {
-    className: "menu-separator" + className
+    className: "menu-separator" + (item.className ? " " + item.className : "")
   });
 }
 
-function MenuSubmenu(props) {
-  var className = props.item.className ? " " + props.item.className : "";
-  var icon = props.item.icon ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(FontAwesomeIcon, {
-    className: "fa",
-    icon: props.item.icon
-  }) : null;
+function MenuSubmenu(_ref3) {
+  var item = _ref3.item,
+      createMenu = _ref3.createMenu;
   return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("li", {
-    className: "menu-item submenu" + className,
-    "data-data": props.item.data
+    className: "menu-item submenu" + (item.className ? " " + item.className : ""),
+    "data-data": item.data
   }, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("button", {
     type: "button",
     className: "menu-btn"
-  }, icon, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("span", {
+  }, item.icon ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(FontAwesomeIcon, {
+    className: "fa",
+    icon: item.icon
+  }) : null, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("span", {
     className: "menu-text"
-  }, props.item["title"])), props.createMenu(props.item["submenu"], true));
+  }, item["title"])), createMenu(item["submenu"], true));
 }
 
-var src_ContextMenu = /*#__PURE__*/function (_Component) {
-  _inheritsLoose(ContextMenu, _Component);
-
-  function ContextMenu() {
-    var _this;
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-
-    src_defineProperty(_assertThisInitialized(_this), "onClickMenu", function (e) {
-      var parentLiElem = e.target.closest("li.menu-item");
-
-      if (parentLiElem) {
-        _this.props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
-      }
-    });
-
-    return _this;
-  }
-
-  var _proto = ContextMenu.prototype;
-
-  _proto.componentDidUpdate = function componentDidUpdate(prevProps, prevState) {
-    var menu = document.querySelector('menu');
-    if (!menu) return;
+function ContextMenu(props) {
+  var menuElem = Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useRef"])(null);
+  useOnClickOutside(menuElem, props.hideMenu);
+  Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useLayoutEffect"])(function () {
+    console.log('useEffect', menuElem.current, props);
+    if (!menuElem.current) return;
     var widthWindow = document.documentElement.clientWidth;
     var heightWindow = document.documentElement.clientHeight;
-    var coordsMenu = menu.getBoundingClientRect();
+    var coordsMenu = menuElem.current.getBoundingClientRect();
 
     if (widthWindow < coordsMenu.x + coordsMenu.width) {
-      menu.style.left = widthWindow - coordsMenu.width + 'px';
+      menuElem.current.style.left = widthWindow - coordsMenu.width + 'px';
     }
 
     ;
 
     if (heightWindow < coordsMenu.y + coordsMenu.height) {
-      menu.style.top = heightWindow - coordsMenu.height + 'px';
+      menuElem.current.style.top = heightWindow - coordsMenu.height + 'px';
     }
 
     ;
-    var menus = Array.from(document.querySelectorAll('menu')).slice(1);
-    menus.forEach(function (menu, i) {
-      menu.classList.remove('menuRight');
-      menu.classList.add('menuLeft');
-      menu.classList.remove('menuBottom');
-      menu.classList.add('menuTop');
-      coordsMenu = menu.getBoundingClientRect();
+    var submenus = Array.from(document.querySelectorAll('menu')).slice(1);
+    submenus.forEach(function (submenu) {
+      submenu.classList.remove('menuRight');
+      submenu.classList.add('menuLeft');
+      submenu.classList.remove('menuBottom');
+      submenu.classList.add('menuTop');
+      coordsMenu = submenu.getBoundingClientRect();
 
       if (coordsMenu.x < 0) {
-        menu.classList.remove('menuRight');
-        menu.classList.add('menuLeft');
+        submenu.classList.remove('menuRight');
+        submenu.classList.add('menuLeft');
       } else if (widthWindow < coordsMenu.x + coordsMenu.width) {
-        menu.classList.add('menuRight');
-        menu.classList.remove('menuLeft');
+        submenu.classList.add('menuRight');
+        submenu.classList.remove('menuLeft');
       }
 
       ;
 
       if (heightWindow < coordsMenu.y + coordsMenu.height) {
-        menu.classList.add('menuBottom');
-        menu.classList.remove('menuTop');
+        submenu.classList.add('menuBottom');
+        submenu.classList.remove('menuTop');
       }
 
       ;
     });
-  };
+  });
 
-  _proto.createMenu = function createMenu(arrMenuItem, submenu) {
-    var _this2 = this;
+  function onClickMenu(e) {
+    var parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
 
+    if (parentLiElem) {
+      props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+      props.hideMenu();
+    }
+
+    ;
+  }
+
+  ;
+
+  function createMenu(arrMenuItem, submenu) {
     if (submenu === void 0) {
       submenu = false;
     }
 
-    if (!submenu && !this.props.visible) {
-      return [];
-    }
-
     return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("menu", {
+      ref: submenu ? null : menuElem,
       className: submenu ? "menu" : "menu show-menu",
       style: submenu ? null : {
-        left: this.props.pageXY[0],
-        top: this.props.pageXY[1]
+        left: props.pageXY[0],
+        top: props.pageXY[1]
       },
       onClick: submenu ? null : function (e) {
-        return _this2.onClickMenu(e);
+        return onClickMenu(e);
       }
-    }, arrMenuItem.map(function (item, i, arr) {
+    }, arrMenuItem.map(function (item, i) {
       if (item["type"] === "item") {
         return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuItem, {
           key: i,
@@ -9694,7 +9729,7 @@ var src_ContextMenu = /*#__PURE__*/function (_Component) {
         return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuSubmenu, {
           key: i,
           item: item,
-          createMenu: _this2.createMenu
+          createMenu: createMenu
         });
       } else {
         return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("div", {
@@ -9702,22 +9737,15 @@ var src_ContextMenu = /*#__PURE__*/function (_Component) {
         }, item["type"]);
       }
     }));
-  };
+  }
 
-  _proto.render = function render() {
-    if (!this.props.visible) return false;
-    var contextMenu = this.createMenu(this.props.items);
-    return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("div", {
-      className: "react-contextmenu"
-    }, contextMenu);
-  };
-
-  return ContextMenu;
-}(external_root_React_commonjs2_react_commonjs_react_amd_react_["Component"]);
-
-
-src_ContextMenu.defaultProps = {
+  return props.visible ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("div", {
+    className: "react-contextmenu"
+  }, createMenu(props.items)) : null;
+}
+ContextMenu.defaultProps = {
   visible: false,
+  hideMenu: function hideMenu() {},
   pageXY: [0, 0],
   items: [{
     type: "item",
@@ -9756,8 +9784,9 @@ src_ContextMenu.defaultProps = {
     console.log("default callbackOnClickMenu = ", data, parentLiElem);
   }
 };
-src_ContextMenu.propTypes = {
+ContextMenu.propTypes = {
   visible: prop_types_default.a.bool,
+  hideMenu: prop_types_default.a.func,
   pageXY: prop_types_default.a.array,
   items: prop_types_default.a.array,
   callbackOnClickMenu: prop_types_default.a.func

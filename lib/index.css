@@ -1,26 +1,3 @@
-/* Page */
-
-/* html {
-    width: 100%;
-    height: 100%;
-    background: #000000 url(header.jpg) no-repeat center top;
-} */
-
-/* .container {
-    left: 0;
-    margin: auto;
-    position: absolute;
-    top: 20%;
-    width: 100%;
-    text-align: center;
-} */
-
-/* h1,
-h2 {
-    color: #fff;
-	text-shadow: 1px 1px 5px black, 0 0 5em black;
-} */
-
 /* Menu */
 
 .react-contextmenu .menu {
@@ -31,20 +8,22 @@ h2 {
   border: 1px solid #bbb;
   background: #eee;
   background: -webkit-linear-gradient(
-    to bottom,
-    #fff 0%,
-    #e5e5e5 100px,
-    #e5e5e5 100%
+          to bottom,
+          #fff 0%,
+          #e5e5e5 100px,
+          #e5e5e5 100%
   );
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
   z-index: 100;
   border-radius: 3px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+
   opacity: 0;
-  -webkit-transform: translate(0, 15px) scale(0.95);
-  transform: translate(0, 15px) scale(0.95);
-  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-  pointer-events: none;
+  visibility: hidden;
+  /* Submenu animation */
+  transition-property: opacity, visibility;
+  transition-duration: 0.3s;
+  transition-delay: 0.15s;
 }
 
 .react-contextmenu .menu-item {
@@ -152,12 +131,6 @@ h2 {
 .react-contextmenu .show-menu,
 .react-contextmenu .menu-item:hover > .menu {
   opacity: 1;
-  -webkit-transform: translate(0, 0) scale(1);
-  transform: translate(0, 0) scale(1);
+  visibility: visible;
   pointer-events: auto;
-}
-
-.react-contextmenu .menu-item:hover > .menu {
-  -webkit-transition-delay: 100ms;
-  transition-delay: 300ms;
 }

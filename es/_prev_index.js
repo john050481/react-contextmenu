@@ -1,7 +1,12 @@
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+import React, { Component } from "react";
 import "./index.css";
-import React, { useLayoutEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { useOnClickOutside } from './useOnClickOutside';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -47,83 +52,91 @@ function MenuSubmenu(_ref3) {
   }, item["title"])), createMenu(item["submenu"], true));
 }
 
-export default function ContextMenu(props) {
-  var menuElem = useRef(null);
-  useOnClickOutside(menuElem, props.hideMenu);
-  useLayoutEffect(function () {
-    console.log('useEffect', menuElem.current, props);
-    if (!menuElem.current) return;
+var ContextMenu = /*#__PURE__*/function (_Component) {
+  _inheritsLoose(ContextMenu, _Component);
+
+  function ContextMenu(props) {
+    var _this;
+
+    _this = _Component.call(this, props) || this;
+
+    _defineProperty(_assertThisInitialized(_this), "onClickMenu", function (e) {
+      var parentLiElem = e.target.closest("li.menu-item");
+
+      if (parentLiElem) {
+        _this.props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+      }
+    });
+
+    _this.createMenu = _this.createMenu.bind(_assertThisInitialized(_this));
+    _this.onClickMenu = _this.onClickMenu.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  var _proto = ContextMenu.prototype;
+
+  _proto.componentDidUpdate = function componentDidUpdate(prevProps, prevState) {
+    var menu = document.querySelector('menu');
+    if (!menu) return;
     var widthWindow = document.documentElement.clientWidth;
     var heightWindow = document.documentElement.clientHeight;
-    var coordsMenu = menuElem.current.getBoundingClientRect();
+    var coordsMenu = menu.getBoundingClientRect();
 
     if (widthWindow < coordsMenu.x + coordsMenu.width) {
-      menuElem.current.style.left = widthWindow - coordsMenu.width + 'px';
+      menu.style.left = widthWindow - coordsMenu.width + 'px';
     }
 
     ;
 
     if (heightWindow < coordsMenu.y + coordsMenu.height) {
-      menuElem.current.style.top = heightWindow - coordsMenu.height + 'px';
+      menu.style.top = heightWindow - coordsMenu.height + 'px';
     }
 
     ;
-    var submenus = Array.from(document.querySelectorAll('menu')).slice(1);
-    submenus.forEach(function (submenu) {
-      submenu.classList.remove('menuRight');
-      submenu.classList.add('menuLeft');
-      submenu.classList.remove('menuBottom');
-      submenu.classList.add('menuTop');
-      coordsMenu = submenu.getBoundingClientRect();
+    var menus = Array.from(document.querySelectorAll('menu')).slice(1);
+    menus.forEach(function (menu, i) {
+      menu.classList.remove('menuRight');
+      menu.classList.add('menuLeft');
+      menu.classList.remove('menuBottom');
+      menu.classList.add('menuTop');
+      coordsMenu = menu.getBoundingClientRect();
 
       if (coordsMenu.x < 0) {
-        submenu.classList.remove('menuRight');
-        submenu.classList.add('menuLeft');
+        menu.classList.remove('menuRight');
+        menu.classList.add('menuLeft');
       } else if (widthWindow < coordsMenu.x + coordsMenu.width) {
-        submenu.classList.add('menuRight');
-        submenu.classList.remove('menuLeft');
+        menu.classList.add('menuRight');
+        menu.classList.remove('menuLeft');
       }
 
       ;
 
       if (heightWindow < coordsMenu.y + coordsMenu.height) {
-        submenu.classList.add('menuBottom');
-        submenu.classList.remove('menuTop');
+        menu.classList.add('menuBottom');
+        menu.classList.remove('menuTop');
       }
 
       ;
     });
-  });
+  };
 
-  function onClickMenu(e) {
-    var parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
+  _proto.createMenu = function createMenu(arrMenuItem, submenu) {
+    var _this2 = this;
 
-    if (parentLiElem) {
-      props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
-      props.hideMenu();
-    }
-
-    ;
-  }
-
-  ;
-
-  function createMenu(arrMenuItem, submenu) {
     if (submenu === void 0) {
       submenu = false;
     }
 
     return /*#__PURE__*/React.createElement("menu", {
-      ref: submenu ? null : menuElem,
       className: submenu ? "menu" : "menu show-menu",
       style: submenu ? null : {
-        left: props.pageXY[0],
-        top: props.pageXY[1]
+        left: this.props.pageXY[0],
+        top: this.props.pageXY[1]
       },
       onClick: submenu ? null : function (e) {
-        return onClickMenu(e);
+        return _this2.onClickMenu(e);
       }
-    }, arrMenuItem.map(function (item, i) {
+    }, arrMenuItem.map(function (item, i, arr) {
       if (item["type"] === "item") {
         return /*#__PURE__*/React.createElement(MenuItem, {
           key: i,
@@ -138,7 +151,7 @@ export default function ContextMenu(props) {
         return /*#__PURE__*/React.createElement(MenuSubmenu, {
           key: i,
           item: item,
-          createMenu: createMenu
+          createMenu: _this2.createMenu
         });
       } else {
         return /*#__PURE__*/React.createElement("div", {
@@ -146,15 +159,22 @@ export default function ContextMenu(props) {
         }, item["type"]);
       }
     }));
-  }
+  };
 
-  return props.visible ? /*#__PURE__*/React.createElement("div", {
-    className: "react-contextmenu"
-  }, createMenu(props.items)) : null;
-}
+  _proto.render = function render() {
+    if (!this.props.visible) return false;
+    var contextMenu = this.createMenu(this.props.items);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "react-contextmenu"
+    }, contextMenu);
+  };
+
+  return ContextMenu;
+}(Component);
+
+export { ContextMenu as default };
 ContextMenu.defaultProps = {
   visible: false,
-  hideMenu: function hideMenu() {},
   pageXY: [0, 0],
   items: [{
     type: "item",
@@ -195,7 +215,6 @@ ContextMenu.defaultProps = {
 };
 ContextMenu.propTypes = process.env.NODE_ENV !== "production" ? {
   visible: PropTypes.bool,
-  hideMenu: PropTypes.func,
   pageXY: PropTypes.array,
   items: PropTypes.array,
   callbackOnClickMenu: PropTypes.func
