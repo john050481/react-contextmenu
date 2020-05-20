@@ -1,5 +1,5 @@
 /*!
- * @john0504/react-contextmenu v1.1.3 - https://github.com/john050481/react-contextmenu#readme
+ * @john0504/react-contextmenu v1.1.4 - https://github.com/john050481/react-contextmenu#readme
  * MIT Licensed
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -9598,44 +9598,29 @@ var _iconsCache = {
 
 index_es["b" /* library */].add(_iconsCache);
 
-function MenuItem(_ref) {
+function MenuSeparator(_ref) {
   var item = _ref.item;
-  return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("li", {
-    className: "menu-item" + (item.className ? " " + item.className : ""),
-    "data-data": item.data
-  }, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("button", {
-    type: "button",
-    className: "menu-btn"
-  }, item.icon ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(FontAwesomeIcon, {
-    className: "fa",
-    icon: item.icon
-  }) : null, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("span", {
-    className: "menu-text"
-  }, item.title)));
-}
-
-function MenuSeparator(_ref2) {
-  var item = _ref2.item;
   return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("li", {
     className: "menu-separator" + (item.className ? " " + item.className : "")
   });
 }
 
-function MenuSubmenu(_ref3) {
-  var item = _ref3.item,
-      createMenu = _ref3.createMenu;
+function MenuItem(_ref2) {
+  var item = _ref2.item,
+      _ref2$createSubmenu = _ref2.createSubmenu,
+      createSubmenu = _ref2$createSubmenu === void 0 ? false : _ref2$createSubmenu;
   return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("li", {
-    className: "menu-item submenu" + (item.className ? " " + item.className : ""),
+    className: "menu-item" + (createSubmenu ? " submenu" : "") + (item.className ? " " + item.className : ""),
     "data-data": item.data
   }, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("button", {
     type: "button",
     className: "menu-btn"
-  }, item.icon ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(FontAwesomeIcon, {
+  }, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(FontAwesomeIcon, {
     className: "fa",
-    icon: item.icon
-  }) : null, /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("span", {
+    icon: item.icon ? item.icon : 'circle'
+  }), /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("span", {
     className: "menu-text"
-  }, item["title"])), createMenu(item["submenu"], true));
+  }, item["title"])), createSubmenu && createSubmenu(item["submenu"], true));
 }
 
 function ContextMenu(props) {
@@ -9646,43 +9631,51 @@ function ContextMenu(props) {
     if (!menuElem.current) return;
     var widthWindow = document.documentElement.clientWidth;
     var heightWindow = document.documentElement.clientHeight;
-    var coordsMenu = menuElem.current.getBoundingClientRect();
 
-    if (widthWindow < coordsMenu.x + coordsMenu.width) {
-      menuElem.current.style.left = widthWindow - coordsMenu.width + 'px';
+    function checkOutWindow(checkedElement, isRootMenu) {
+      if (isRootMenu === void 0) {
+        isRootMenu = false;
+      }
+
+      if (!isRootMenu) {
+        checkedElement.classList.remove('menuRight');
+        checkedElement.classList.add('menuLeft');
+        checkedElement.classList.remove('menuBottom');
+        checkedElement.classList.add('menuTop');
+      }
+
+      var coordsCheckedElement = checkedElement.getBoundingClientRect();
+
+      if (widthWindow < coordsCheckedElement.x + coordsCheckedElement.width) {
+        if (isRootMenu) checkedElement.style.left = widthWindow - coordsCheckedElement.width + 'px';
+
+        if (!isRootMenu) {
+          checkedElement.classList.add('menuRight');
+          checkedElement.classList.remove('menuLeft');
+        }
+      }
+
+      ;
+
+      if (heightWindow < coordsCheckedElement.y + coordsCheckedElement.height) {
+        if (isRootMenu) checkedElement.style.top = heightWindow - coordsCheckedElement.height + 'px';
+
+        if (!isRootMenu) {
+          checkedElement.classList.add('menuBottom');
+          checkedElement.classList.remove('menuTop');
+        }
+      }
+
+      ;
     }
 
-    ;
+    ; // correction of the position of the root menu, if it is outside the window
 
-    if (heightWindow < coordsMenu.y + coordsMenu.height) {
-      menuElem.current.style.top = heightWindow - coordsMenu.height + 'px';
-    }
+    checkOutWindow(menuElem.current, true); // correction of the position of the submenus, if it is outside the window
 
-    ;
     var submenus = Array.from(document.querySelectorAll('menu')).slice(1);
     submenus.forEach(function (submenu) {
-      submenu.classList.remove('menuRight');
-      submenu.classList.add('menuLeft');
-      submenu.classList.remove('menuBottom');
-      submenu.classList.add('menuTop');
-      coordsMenu = submenu.getBoundingClientRect();
-
-      if (coordsMenu.x < 0) {
-        submenu.classList.remove('menuRight');
-        submenu.classList.add('menuLeft');
-      } else if (widthWindow < coordsMenu.x + coordsMenu.width) {
-        submenu.classList.add('menuRight');
-        submenu.classList.remove('menuLeft');
-      }
-
-      ;
-
-      if (heightWindow < coordsMenu.y + coordsMenu.height) {
-        submenu.classList.add('menuBottom');
-        submenu.classList.remove('menuTop');
-      }
-
-      ;
+      checkOutWindow(submenu, false);
     });
   });
 
@@ -9715,27 +9708,22 @@ function ContextMenu(props) {
         return onClickMenu(e);
       }
     }, arrMenuItem.map(function (item, i) {
-      if (item["type"] === "item") {
-        return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuItem, {
-          key: i,
-          item: item
-        });
-      } else if (item["type"] === "separator") {
-        return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuSeparator, {
-          key: i,
-          item: item
-        });
-      } else if (item["type"] === "submenu") {
-        return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuSubmenu, {
-          key: i,
-          item: item,
-          createMenu: createMenu
-        });
-      } else {
-        return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("div", {
-          key: i
-        }, item["type"]);
-      }
+      if (item["type"] === "item") return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuItem, {
+        key: i,
+        item: item
+      });
+      if (item["type"] === "separator") return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuSeparator, {
+        key: i,
+        item: item
+      });
+      if (item["type"] === "submenu") return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement(MenuItem, {
+        key: i,
+        item: item,
+        createSubmenu: createMenu
+      });
+      return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("div", {
+        key: i
+      }, item["type"]);
     }));
   }
 
@@ -9743,8 +9731,23 @@ function ContextMenu(props) {
     className: "react-contextmenu"
   }, createMenu(props.items)) : null;
 }
+ContextMenu.propTypes = {
+  visible: prop_types_default.a.bool.isRequired,
+  hideMenu: prop_types_default.a.func.isRequired,
+  pageXY: prop_types_default.a.array.isRequired,
+  items: prop_types_default.a.array.isRequired,
+  callbackOnClickMenu: prop_types_default.a.func.isRequired
+};
+MenuSeparator.propTypes = {
+  item: prop_types_default.a.object.isRequired
+};
+MenuItem.propTypes = {
+  item: prop_types_default.a.object.isRequired,
+  createSubmenu: prop_types_default.a.func
+}; // for example
+
 ContextMenu.defaultProps = {
-  visible: false,
+  visible: true,
   hideMenu: function hideMenu() {},
   pageXY: [0, 0],
   items: [{
@@ -9783,23 +9786,6 @@ ContextMenu.defaultProps = {
   callbackOnClickMenu: function callbackOnClickMenu(data, parentLiElem) {
     console.log("default callbackOnClickMenu = ", data, parentLiElem);
   }
-};
-ContextMenu.propTypes = {
-  visible: prop_types_default.a.bool,
-  hideMenu: prop_types_default.a.func,
-  pageXY: prop_types_default.a.array,
-  items: prop_types_default.a.array,
-  callbackOnClickMenu: prop_types_default.a.func
-};
-MenuItem.propTypes = {
-  item: prop_types_default.a.object.isRequired
-};
-MenuSeparator.propTypes = {
-  item: prop_types_default.a.object.isRequired
-};
-MenuSubmenu.propTypes = {
-  item: prop_types_default.a.object.isRequired,
-  createMenu: prop_types_default.a.func.isRequired
 };
 
 /***/ })

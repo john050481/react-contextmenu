@@ -5,22 +5,18 @@
   width: 200px;
   padding: 2px;
   margin: 0;
-  border: 1px solid #bbb;
+
   background: #eee;
-  background: -webkit-linear-gradient(
-          to bottom,
-          #fff 0%,
-          #e5e5e5 100px,
-          #e5e5e5 100%
-  );
+  background: -webkit-linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
-  z-index: 100;
+  border: 2px solid #bbb;
   border-radius: 3px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  z-index: 100;
 
+  /* animation */
   opacity: 0;
   visibility: hidden;
-  /* Submenu animation */
   transition-property: opacity, visibility;
   transition-duration: 0.3s;
   transition-delay: 0.15s;
@@ -35,23 +31,27 @@
 }
 
 .react-contextmenu .menu-btn {
-  background: none;
-  line-height: normal;
+  display: block;
+  padding: 6px 0px 8px 0px;
   overflow: visible;
+
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+
+  line-height: normal;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  display: block;
   width: 100%;
+
   color: #444;
   font-family: "Roboto", sans-serif;
   font-size: 13px;
   text-align: left;
+
   cursor: pointer;
-  border: 1px solid transparent;
   white-space: nowrap;
-  padding: 6px 8px;
-  border-radius: 3px;
 }
 
 .react-contextmenu .menu-btn::-moz-focus-inner {
@@ -113,19 +113,19 @@
 }
 
 .react-contextmenu .menu .menuTop {
-  top: 4px;
+  top: 0%;
 }
 
 .react-contextmenu .menu .menuBottom {
-  bottom: 4px;
+  bottom: 0%;
 }
 
 .react-contextmenu .menu .menuRight {
-  right: 99%;
+  right: 100%;
 }
 
 .react-contextmenu .menu .menuLeft {
-  left: 99%;
+  left: 100%;
 }
 
 .react-contextmenu .show-menu,
