@@ -9,35 +9,17 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 library.add(fas);
 
-function MenuItem({item}) {
-  return (
-    <li className={ "menu-item" + (item.className ? ` ${item.className}` : "") } data-data={item.data}>
-      <button type="button" className="menu-btn">
-        {
-          item.icon
-              ? <FontAwesomeIcon className="fa" icon={item.icon} />
-              : null
-        }
-        <span className="menu-text">{item.title}</span>
-      </button>
-    </li>
-  );
-}
 function MenuSeparator({item}) {
   return <li className={ "menu-separator" + (item.className ? ` ${item.className}` : "") } />;
 }
-function MenuSubmenu({item, createMenu}) {
+function MenuItem({item, createSubmenu = false}) {
   return (
-    <li className={ "menu-item submenu" + (item.className ? ` ${item.className}` : "") } data-data={item.data}>
+    <li className={ "menu-item" + (createSubmenu ? " submenu" : "") + (item.className ? ` ${item.className}` : "") } data-data={item.data}>
       <button type="button" className="menu-btn">
-        {
-          item.icon
-              ? <FontAwesomeIcon className="fa" icon={item.icon} />
-              : null
-        }
+        <FontAwesomeIcon className="fa" icon={ item.icon ? item.icon : 'circle' } />
         <span className="menu-text">{item["title"]}</span>
       </button>
-      {createMenu(item["submenu"], true)}
+      {createSubmenu && createSubmenu(item["submenu"], true)}
     </li>
   );
 }
@@ -113,7 +95,7 @@ export default function ContextMenu(props) {
               return <MenuSeparator key={i} item={item} />
 
           if (item["type"] === "submenu")
-              return <MenuSubmenu key={i} item={item} createMenu={createMenu} />
+              return <MenuItem key={i} item={item} createSubmenu={createMenu} />
 
           return <div key={i}>{item["type"]}</div>
         })}
@@ -135,17 +117,15 @@ ContextMenu.propTypes = {
   items: PropTypes.array.isRequired,
   callbackOnClickMenu: PropTypes.func.isRequired
 };
-MenuItem.propTypes = {
-  item: PropTypes.object.isRequired
-};
 MenuSeparator.propTypes = {
   item: PropTypes.object.isRequired
 };
-MenuSubmenu.propTypes = {
+MenuItem.propTypes = {
   item: PropTypes.object.isRequired,
-  createMenu: PropTypes.func.isRequired
+  createSubmenu: PropTypes.func
 };
 
+// for example
 ContextMenu.defaultProps = {
   visible: true,
   hideMenu: () => {},
