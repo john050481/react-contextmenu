@@ -9,7 +9,7 @@
   background: #eee;
   background: -webkit-linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
   background: linear-gradient(to bottom, #fff 0%, #e5e5e5 100px, #e5e5e5 100%);
-  border: 1px solid #bbb;
+  border: 2px solid #bbb;
   border-radius: 3px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
   z-index: 100;
@@ -32,7 +32,7 @@
 
 .react-contextmenu .menu-btn {
   display: block;
-  padding: 6px 8px;
+  padding: 6px 0px 8px 0px;
   overflow: visible;
 
   background: none;
@@ -113,19 +113,19 @@
 }
 
 .react-contextmenu .menu .menuTop {
-  top: 4px;
+  top: 0%;
 }
 
 .react-contextmenu .menu .menuBottom {
-  bottom: 4px;
+  bottom: 0%;
 }
 
 .react-contextmenu .menu .menuRight {
-  right: 99%;
+  right: 100%;
 }
 
 .react-contextmenu .menu .menuLeft {
-  left: 99%;
+  left: 100%;
 }
 
 .react-contextmenu .show-menu,

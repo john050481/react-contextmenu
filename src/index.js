@@ -30,45 +30,49 @@ export default function ContextMenu(props) {
   useOnClickOutside(menuElem, props.hideMenu);
 
   useLayoutEffect( () => {
-    console.log('useEffect', menuElem.current, props);
+      console.log('useEffect', menuElem.current, props);
 
-    if (!menuElem.current) return;
+      if (!menuElem.current) return;
 
-    const widthWindow = document.documentElement.clientWidth;
-    const heightWindow = document.documentElement.clientHeight;
-    const coordsRootMenu = menuElem.current.getBoundingClientRect();
+      const widthWindow = document.documentElement.clientWidth;
+      const heightWindow = document.documentElement.clientHeight;
 
-    // correction of the position of the root menu, if it is outside the window
-    if (widthWindow < coordsRootMenu.x + coordsRootMenu.width) {
-        menuElem.current.style.left = widthWindow - coordsRootMenu.width + 'px';
-    };
-    if (heightWindow < coordsRootMenu.y + coordsRootMenu.height) {
-        menuElem.current.style.top = heightWindow - coordsRootMenu.height + 'px';
-    };
+      function checkOutWindow(checkedElement, isRootMenu = false) {
+          if (!isRootMenu) {
+              checkedElement.classList.remove('menuRight');
+              checkedElement.classList.add('menuLeft');
+              checkedElement.classList.remove('menuBottom');
+              checkedElement.classList.add('menuTop');
+          }
 
-    // correction of the position of the submenus, if it is outside the window
-    let submenus = Array.from(document.querySelectorAll('menu')).slice(1);
-    submenus.forEach( submenu => {
-        const coordsSubmenu = submenu.getBoundingClientRect();
+          const coordsCheckedElement = checkedElement.getBoundingClientRect();
 
-        submenu.classList.remove('menuRight');
-        submenu.classList.add('menuLeft');
-        submenu.classList.remove('menuBottom');
-        submenu.classList.add('menuTop');
+          if (widthWindow < coordsCheckedElement.x + coordsCheckedElement.width) {
+              if (isRootMenu) checkedElement.style.left = widthWindow - coordsCheckedElement.width + 'px';
 
-        if (coordsSubmenu.x < 0) {
-            submenu.classList.remove('menuRight');
-            submenu.classList.add('menuLeft');
-        } else if (widthWindow < coordsSubmenu.x + coordsSubmenu.width) {
-            submenu.classList.add('menuRight');
-            submenu.classList.remove('menuLeft');
-        };
+              if (!isRootMenu) {
+                  checkedElement.classList.add('menuRight');
+                  checkedElement.classList.remove('menuLeft');
+              }
+          };
+          if (heightWindow < coordsCheckedElement.y + coordsCheckedElement.height) {
+              if (isRootMenu) checkedElement.style.top = heightWindow - coordsCheckedElement.height + 'px';
 
-        if (heightWindow < coordsSubmenu.y + coordsSubmenu.height) {
-            submenu.classList.add('menuBottom');
-            submenu.classList.remove('menuTop');
-        };
-    } );
+              if (!isRootMenu) {
+                  checkedElement.classList.add('menuBottom');
+                  checkedElement.classList.remove('menuTop');
+              }
+          };
+      };
+
+      // correction of the position of the root menu, if it is outside the window
+      checkOutWindow(menuElem.current, true);
+
+      // correction of the position of the submenus, if it is outside the window
+      let submenus = Array.from(document.querySelectorAll('menu')).slice(1);
+      submenus.forEach( submenu => {
+          checkOutWindow(submenu, false);
+      } );
   });
 
   function onClickMenu(e) {
