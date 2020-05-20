@@ -30,7 +30,7 @@ export default function ContextMenu(props) {
     useOnClickOutside(menuElem, props.hideMenu);
 
     useLayoutEffect( () => {
-        console.log('useEffect', menuElem.current, props);
+        //console.log('useEffect', menuElem.current, props);
 
         if (!menuElem.current) return;
 
