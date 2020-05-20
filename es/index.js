@@ -36,7 +36,7 @@ export default function ContextMenu(props) {
   var menuElem = useRef(null);
   useOnClickOutside(menuElem, props.hideMenu);
   useLayoutEffect(function () {
-    console.log('useEffect', menuElem.current, props);
+    //console.log('useEffect', menuElem.current, props);
     if (!menuElem.current) return;
     var widthWindow = document.documentElement.clientWidth;
     var heightWindow = document.documentElement.clientHeight;

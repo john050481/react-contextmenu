@@ -1,5 +1,5 @@
 /*!
- * @john0504/react-contextmenu v1.1.5 - https://github.com/john050481/react-contextmenu#readme
+ * @john0504/react-contextmenu v1.1.6 - https://github.com/john050481/react-contextmenu#readme
  * MIT Licensed
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -9627,7 +9627,7 @@ function ContextMenu(props) {
   var menuElem = Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useRef"])(null);
   useOnClickOutside(menuElem, props.hideMenu);
   Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useLayoutEffect"])(function () {
-    console.log('useEffect', menuElem.current, props);
+    //console.log('useEffect', menuElem.current, props);
     if (!menuElem.current) return;
     var widthWindow = document.documentElement.clientWidth;
     var heightWindow = document.documentElement.clientHeight;
