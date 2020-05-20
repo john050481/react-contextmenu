@@ -52,70 +52,70 @@ export default function ContextMenu(props) {
 
     if (!menuElem.current) return;
 
-    let widthWindow = document.documentElement.clientWidth;
-    let heightWindow = document.documentElement.clientHeight;
-    let coordsMenu = menuElem.current.getBoundingClientRect();
+    const widthWindow = document.documentElement.clientWidth;
+    const heightWindow = document.documentElement.clientHeight;
+    const coordsRootMenu = menuElem.current.getBoundingClientRect();
 
-    if (widthWindow < coordsMenu.x + coordsMenu.width) {
-      menuElem.current.style.left = widthWindow - coordsMenu.width + 'px';
+    // correction of the position of the root menu, if it is outside the window
+    if (widthWindow < coordsRootMenu.x + coordsRootMenu.width) {
+        menuElem.current.style.left = widthWindow - coordsRootMenu.width + 'px';
     };
-    if (heightWindow < coordsMenu.y + coordsMenu.height) {
-      menuElem.current.style.top = heightWindow - coordsMenu.height + 'px';
+    if (heightWindow < coordsRootMenu.y + coordsRootMenu.height) {
+        menuElem.current.style.top = heightWindow - coordsRootMenu.height + 'px';
     };
 
+    // correction of the position of the submenus, if it is outside the window
     let submenus = Array.from(document.querySelectorAll('menu')).slice(1);
     submenus.forEach( submenu => {
-      submenu.classList.remove('menuRight');
-      submenu.classList.add('menuLeft');
-      submenu.classList.remove('menuBottom');
-      submenu.classList.add('menuTop');
-      coordsMenu = submenu.getBoundingClientRect();
-      if (coordsMenu.x < 0) {
+        const coordsSubmenu = submenu.getBoundingClientRect();
+
         submenu.classList.remove('menuRight');
         submenu.classList.add('menuLeft');
-      } else if (widthWindow < coordsMenu.x + coordsMenu.width) {
-        submenu.classList.add('menuRight');
-        submenu.classList.remove('menuLeft');
-      };
-      if (heightWindow < coordsMenu.y + coordsMenu.height) {
-        submenu.classList.add('menuBottom');
-        submenu.classList.remove('menuTop');
-      };
+        submenu.classList.remove('menuBottom');
+        submenu.classList.add('menuTop');
+
+        if (coordsSubmenu.x < 0) {
+            submenu.classList.remove('menuRight');
+            submenu.classList.add('menuLeft');
+        } else if (widthWindow < coordsSubmenu.x + coordsSubmenu.width) {
+            submenu.classList.add('menuRight');
+            submenu.classList.remove('menuLeft');
+        };
+
+        if (heightWindow < coordsSubmenu.y + coordsSubmenu.height) {
+            submenu.classList.add('menuBottom');
+            submenu.classList.remove('menuTop');
+        };
     } );
   });
 
   function onClickMenu(e) {
     let parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
     if (parentLiElem) {
-      props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
-      props.hideMenu();
+        props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+        props.hideMenu();
     };
   };
 
   function createMenu(arrMenuItem, submenu = false) {
     return (
       <menu
-        ref={submenu ? null : menuElem}
-        className={submenu ? "menu" : "menu show-menu"}
-        style={
-          submenu
-            ? null
-            : { left: props.pageXY[0], top: props.pageXY[1] }
-        }
-        onClick={submenu ? null : e => onClickMenu(e)}
+          ref = {submenu ? null : menuElem}
+          className = {submenu ? "menu" : "menu show-menu"}
+          style = {submenu ? null : {left: props.pageXY[0], top: props.pageXY[1]}}
+          onClick = {submenu ? null : e => onClickMenu(e)}
       >
         {arrMenuItem.map((item, i) => {
-          if (item["type"] === "item") {
-            return <MenuItem key={i} item={item} />;
-          } else if (item["type"] === "separator") {
-            return <MenuSeparator key={i} item={item} />;
-          } else if (item["type"] === "submenu") {
-            return (
-              <MenuSubmenu key={i} item={item} createMenu={createMenu} />
-            );
-          } else {
-            return <div key={i}>{item["type"]}</div>;
-          }
+          if (item["type"] === "item")
+              return <MenuItem key={i} item={item} />
+
+          if (item["type"] === "separator")
+              return <MenuSeparator key={i} item={item} />
+
+          if (item["type"] === "submenu")
+              return <MenuSubmenu key={i} item={item} createMenu={createMenu} />
+
+          return <div key={i}>{item["type"]}</div>
         })}
       </menu>
     );
@@ -128,8 +128,26 @@ export default function ContextMenu(props) {
   )
 }
 
+ContextMenu.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  hideMenu: PropTypes.func.isRequired,
+  pageXY: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired,
+  callbackOnClickMenu: PropTypes.func.isRequired
+};
+MenuItem.propTypes = {
+  item: PropTypes.object.isRequired
+};
+MenuSeparator.propTypes = {
+  item: PropTypes.object.isRequired
+};
+MenuSubmenu.propTypes = {
+  item: PropTypes.object.isRequired,
+  createMenu: PropTypes.func.isRequired
+};
+
 ContextMenu.defaultProps = {
-  visible: false,
+  visible: true,
   hideMenu: () => {},
   pageXY: [0, 0],
   items: [
@@ -164,22 +182,4 @@ ContextMenu.defaultProps = {
   callbackOnClickMenu: (data, parentLiElem) => {
     console.log("default callbackOnClickMenu = ", data, parentLiElem);
   }
-};
-
-ContextMenu.propTypes = {
-  visible: PropTypes.bool,
-  hideMenu: PropTypes.func,
-  pageXY: PropTypes.array,
-  items: PropTypes.array,
-  callbackOnClickMenu: PropTypes.func
-};
-MenuItem.propTypes = {
-  item: PropTypes.object.isRequired
-};
-MenuSeparator.propTypes = {
-  item: PropTypes.object.isRequired
-};
-MenuSubmenu.propTypes = {
-  item: PropTypes.object.isRequired,
-  createMenu: PropTypes.func.isRequired
 };

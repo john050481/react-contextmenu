@@ -12,24 +12,20 @@ export class ExampleComponent extends Component {
       visible: false,
       pageXY: [10, 10]
     };
+
+    this.onContextMenu = this.onContextMenu.bind(this);
   }
 
   componentDidMount() {
     document
       .getElementById("demo")
-      .addEventListener("contextmenu", this.onContextMenu.bind(this));
-    document.addEventListener("click", this.onClick.bind(this));
+      .addEventListener("contextmenu", this.onContextMenu);
   }
 
   componentWillUnmount() {
     document
       .getElementById("demo")
-      .removeEventListener("contextmenu", this.onContextMenu.bind(this));
-    document.removeEventListener("click", this.onClick.bind(this));
-  }
-
-  onClick(e) {
-    //this.setState({ visible: false });
+      .removeEventListener("contextmenu", this.onContextMenu);
   }
 
   onContextMenu(e) {
