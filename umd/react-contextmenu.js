@@ -1,5 +1,5 @@
 /*!
- * @john0504/react-contextmenu v1.1.6 - https://github.com/john050481/react-contextmenu#readme
+ * @john0504/react-contextmenu v1.1.7 - https://github.com/john050481/react-contextmenu#readme
  * MIT Licensed
  */
 (function webpackUniversalModuleDefinition(root, factory) {
