@@ -42,7 +42,8 @@ export default function ContextMenu(props) {
       pageXY = props.pageXY,
       items = props.items,
       callbackOnClickMenu = props.callbackOnClickMenu,
-      rest = _objectWithoutPropertiesLoose(props, ["visible", "hideMenu", "pageXY", "items", "callbackOnClickMenu"]);
+      className = props.className,
+      rest = _objectWithoutPropertiesLoose(props, ["visible", "hideMenu", "pageXY", "items", "callbackOnClickMenu", "className"]);
 
   var menuElem = useRef(null);
   useOnClickOutside(menuElem, hideMenu);
@@ -119,7 +120,7 @@ export default function ContextMenu(props) {
 
     return /*#__PURE__*/React.createElement("menu", {
       ref: submenu ? null : menuElem,
-      className: submenu ? "menu" : "menu show-menu",
+      className: submenu ? "menu" : "menu show-menu " + (className ? className : ""),
       style: submenu ? null : {
         left: pageXY[0],
         top: pageXY[1]

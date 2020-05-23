@@ -1,5 +1,5 @@
 /*!
- * @john0504/react-contextmenu v1.1.8 - https://github.com/john050481/react-contextmenu#readme
+ * @john0504/react-contextmenu v1.1.9 - https://github.com/john050481/react-contextmenu#readme
  * MIT Licensed
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -9633,7 +9633,8 @@ function ContextMenu(props) {
       pageXY = props.pageXY,
       items = props.items,
       callbackOnClickMenu = props.callbackOnClickMenu,
-      rest = src_objectWithoutPropertiesLoose(props, ["visible", "hideMenu", "pageXY", "items", "callbackOnClickMenu"]);
+      className = props.className,
+      rest = src_objectWithoutPropertiesLoose(props, ["visible", "hideMenu", "pageXY", "items", "callbackOnClickMenu", "className"]);
 
   var menuElem = Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useRef"])(null);
   useOnClickOutside(menuElem, hideMenu);
@@ -9710,7 +9711,7 @@ function ContextMenu(props) {
 
     return /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("menu", {
       ref: submenu ? null : menuElem,
-      className: submenu ? "menu" : "menu show-menu",
+      className: submenu ? "menu" : "menu show-menu " + (className ? className : ""),
       style: submenu ? null : {
         left: pageXY[0],
         top: pageXY[1]
