@@ -25,9 +25,10 @@ function MenuItem({item, createSubmenu = false}) {
 }
 
 export default function ContextMenu(props) {
+    const {visible, hideMenu, pageXY, items, callbackOnClickMenu, ...rest} = props;
 
     let menuElem = useRef(null);
-    useOnClickOutside(menuElem, props.hideMenu);
+    useOnClickOutside(menuElem, hideMenu);
 
     useLayoutEffect( () => {
         //console.log('useEffect', menuElem.current, props);
@@ -80,8 +81,8 @@ export default function ContextMenu(props) {
     function onClickMenu(e) {
         let parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
         if (parentLiElem) {
-            props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
-            props.hideMenu();
+            callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+            hideMenu();
         };
     };
 
@@ -90,7 +91,7 @@ export default function ContextMenu(props) {
             <menu
                 ref = {submenu ? null : menuElem}
                 className = {submenu ? "menu" : "menu show-menu"}
-                style = {submenu ? null : {left: props.pageXY[0], top: props.pageXY[1]}}
+                style = {submenu ? null : {left: pageXY[0], top: pageXY[1]}}
                 onClick = {submenu ? null : e => onClickMenu(e)}
             >
                 {arrMenuItem.map((item, i) => {
@@ -110,8 +111,8 @@ export default function ContextMenu(props) {
     }
 
     return (
-        props.visible
-            ? <div className='react-contextmenu'>{createMenu(props.items)}</div>
+        visible
+            ? <div className='react-contextmenu' {...rest}>{createMenu(items)}</div>
             : null
     )
 }

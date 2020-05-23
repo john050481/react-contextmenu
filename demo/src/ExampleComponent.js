@@ -257,6 +257,7 @@ export class ExampleComponent extends Component {
         </div>
         <hr />
         <ContextMenu
+          className={"react-contextmenu example-contextmenu-class"}
           visible={this.state.visible}
           hideMenu={ () => this.setState({ visible: false }) }
           pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}

@@ -81,6 +81,7 @@ let items = [
 * @param {function} callbackOnClickMenu - callbackOnClickMenu for click menu item (return data and parent LI element)
 */
         <ContextMenu
+          className={"react-contextmenu example-contextmenu-class"}
           visible={this.state.visible}
           hideMenu={ () => this.setState({ visible: false }) }
           pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}
