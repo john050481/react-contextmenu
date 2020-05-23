@@ -1,3 +1,7 @@
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 import "./index.css";
 import React, { useLayoutEffect, useRef } from "react";
 import PropTypes from "prop-types";
@@ -33,8 +37,15 @@ function MenuItem(_ref2) {
 }
 
 export default function ContextMenu(props) {
+  var visible = props.visible,
+      hideMenu = props.hideMenu,
+      pageXY = props.pageXY,
+      items = props.items,
+      callbackOnClickMenu = props.callbackOnClickMenu,
+      rest = _objectWithoutPropertiesLoose(props, ["visible", "hideMenu", "pageXY", "items", "callbackOnClickMenu"]);
+
   var menuElem = useRef(null);
-  useOnClickOutside(menuElem, props.hideMenu);
+  useOnClickOutside(menuElem, hideMenu);
   useLayoutEffect(function () {
     //console.log('useEffect', menuElem.current, props);
     if (!menuElem.current) return;
@@ -92,8 +103,8 @@ export default function ContextMenu(props) {
     var parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
 
     if (parentLiElem) {
-      props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
-      props.hideMenu();
+      callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+      hideMenu();
     }
 
     ;
@@ -110,8 +121,8 @@ export default function ContextMenu(props) {
       ref: submenu ? null : menuElem,
       className: submenu ? "menu" : "menu show-menu",
       style: submenu ? null : {
-        left: props.pageXY[0],
-        top: props.pageXY[1]
+        left: pageXY[0],
+        top: pageXY[1]
       },
       onClick: submenu ? null : function (e) {
         return onClickMenu(e);
@@ -136,9 +147,9 @@ export default function ContextMenu(props) {
     }));
   }
 
-  return props.visible ? /*#__PURE__*/React.createElement("div", {
+  return visible ? /*#__PURE__*/React.createElement("div", _extends({
     className: "react-contextmenu"
-  }, createMenu(props.items)) : null;
+  }, rest), createMenu(items)) : null;
 }
 ContextMenu.propTypes = process.env.NODE_ENV !== "production" ? {
   visible: PropTypes.bool.isRequired,

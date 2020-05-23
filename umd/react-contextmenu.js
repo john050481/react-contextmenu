@@ -1,5 +1,5 @@
 /*!
- * @john0504/react-contextmenu v1.1.7 - https://github.com/john050481/react-contextmenu#readme
+ * @john0504/react-contextmenu v1.1.8 - https://github.com/john050481/react-contextmenu#readme
  * MIT Licensed
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -9589,6 +9589,10 @@ var _iconsCache = {
 
 
 // CONCATENATED MODULE: ./src/index.js
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function src_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 
 
 
@@ -9624,8 +9628,15 @@ function MenuItem(_ref2) {
 }
 
 function ContextMenu(props) {
+  var visible = props.visible,
+      hideMenu = props.hideMenu,
+      pageXY = props.pageXY,
+      items = props.items,
+      callbackOnClickMenu = props.callbackOnClickMenu,
+      rest = src_objectWithoutPropertiesLoose(props, ["visible", "hideMenu", "pageXY", "items", "callbackOnClickMenu"]);
+
   var menuElem = Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useRef"])(null);
-  useOnClickOutside(menuElem, props.hideMenu);
+  useOnClickOutside(menuElem, hideMenu);
   Object(external_root_React_commonjs2_react_commonjs_react_amd_react_["useLayoutEffect"])(function () {
     //console.log('useEffect', menuElem.current, props);
     if (!menuElem.current) return;
@@ -9683,8 +9694,8 @@ function ContextMenu(props) {
     var parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
 
     if (parentLiElem) {
-      props.callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
-      props.hideMenu();
+      callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+      hideMenu();
     }
 
     ;
@@ -9701,8 +9712,8 @@ function ContextMenu(props) {
       ref: submenu ? null : menuElem,
       className: submenu ? "menu" : "menu show-menu",
       style: submenu ? null : {
-        left: props.pageXY[0],
-        top: props.pageXY[1]
+        left: pageXY[0],
+        top: pageXY[1]
       },
       onClick: submenu ? null : function (e) {
         return onClickMenu(e);
@@ -9727,9 +9738,9 @@ function ContextMenu(props) {
     }));
   }
 
-  return props.visible ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("div", {
+  return visible ? /*#__PURE__*/external_root_React_commonjs2_react_commonjs_react_amd_react_default.a.createElement("div", _extends({
     className: "react-contextmenu"
-  }, createMenu(props.items)) : null;
+  }, rest), createMenu(items)) : null;
 }
 ContextMenu.propTypes = {
   visible: prop_types_default.a.bool.isRequired,
