@@ -1,5 +1,5 @@
 /*!
- * @john0504/react-contextmenu v1.1.9 - https://github.com/john050481/react-contextmenu#readme
+ * @john0504/react-contextmenu v2.0.0 - https://github.com/john050481/react-contextmenu#readme
  * MIT Licensed
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -9691,11 +9691,11 @@ function ContextMenu(props) {
     });
   });
 
-  function onClickMenu(e) {
-    var parentLiElem = e.target.closest("li.menu-item:not(.submenu)");
+  function onClickMenu(event) {
+    var parentLiElem = event.target.closest("li.menu-item:not(.submenu)");
 
     if (parentLiElem) {
-      callbackOnClickMenu(parentLiElem.dataset.data, parentLiElem);
+      callbackOnClickMenu(event, parentLiElem.dataset.data);
       hideMenu();
     }
 
@@ -9795,8 +9795,10 @@ ContextMenu.defaultProps = {
       data: "defdataSubMenu2"
     }]
   }],
-  callbackOnClickMenu: function callbackOnClickMenu(data, parentLiElem) {
-    console.log("default callbackOnClickMenu = ", data, parentLiElem);
+  callbackOnClickMenu: function callbackOnClickMenu(event, data) {
+    event.preventDefault();
+    console.log("default callbackOnClickMenu, data = ", data);
+    console.log("default callbackOnClickMenu, event = ", event);
   }
 };
 
