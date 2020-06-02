@@ -53,10 +53,14 @@ export class ExampleComponent extends Component {
     e.preventDefault();
   }
 
-  callbackOnClickMenu(data, parentLiElem) {
+  callbackOnClickMenu(event, data) {
+    event.preventDefault();
+
     let elem = document.getElementById("valueDataset");
     elem.innerHTML = data;
-    console.log("callbackOnClickMenu = ", data, parentLiElem);
+    console.log("callbackOnClickMenu, data = ", data);
+    console.log("callbackOnClickMenu, event = ", event);
+
   }
 
   render() {
@@ -216,8 +220,9 @@ export class ExampleComponent extends Component {
           <span className="value">
             {this.state.pageXY[0]}, {this.state.pageXY[1]}
           </span>
-          <br />
+          <hr />
           <button
+            className="button-show-state"
             onClick={e => {
               console.log(this.state);
             }}
@@ -262,8 +267,8 @@ export class ExampleComponent extends Component {
           hideMenu={ () => this.setState({ visible: false }) }
           pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}
           items={items}
-          callbackOnClickMenu={(data, parentLiElem) => {
-            this.callbackOnClickMenu(data, parentLiElem);
+          callbackOnClickMenu={ (event, data) => {
+            this.callbackOnClickMenu(event, data);
           }}
         />
       </div>
