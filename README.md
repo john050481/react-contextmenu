@@ -78,7 +78,7 @@ let items = [
 * @param {function} hideMenu - function that hides the menu
 * @param {array} pageXY - [x, y], coords click mouse (left and top)
 * @param {array} items - [object] items menus
-* @param {function} callbackOnClickMenu - callbackOnClickMenu for click menu item (return data and parent LI element)
+* @param {function} callbackOnClickMenu - callbackOnClickMenu for click menu item (return event & data)
 */
         <ContextMenu
           className={"react-contextmenu example-contextmenu-class"}
@@ -86,8 +86,8 @@ let items = [
           hideMenu={ () => this.setState({ visible: false }) }
           pageXY={[this.state.pageXY[0], this.state.pageXY[1]]}
           items={items}
-          callbackOnClickMenu={(data, parentLiElem) => {
-            this.callbackOnClickMenu(data, parentLiElem);
+          callbackOnClickMenu={ (event, data) => {
+            this.callbackOnClickMenu(event, data);
           }}
         />
 ```
